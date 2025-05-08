@@ -1,35 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Razorpay Payment</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Razorpay Payment Integration</title>
 </head>
 <body>
-  <h1>Pay ₹500</h1>
-  <button id="payBtn">Pay with Razorpay</button>
+  <h1>Welcome to Razorpay Integration</h1>
+  <p>This is a demo site to accept payments using Razorpay.</p>
+  <button id="rzp-button">Pay ₹1</button>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-    document.getElementById("payBtn").onclick = async function () {
-      const res = await fetch("/create-order", { method: "POST" });
-      const data = await res.json();
-
-      const options = {
-        key: "rzp_test_L1sqG4NKJOJaSb", // Replace with your public key or inject via server
-        amount: data.amount,
-        currency: data.currency,
-        name: "Demo Payment",
-        order_id: data.id,
-        handler: function (response) {
-          alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-        },
-        theme: {
-          color: "#3399cc"
-        }
-      };
-
-      const rzp = new Razorpay(options);
-      rzp.open();
-    };
+    document.getElementById('rzp-button').onclick = function () {
+      fetch('/order', { method: 'POST' })
+        .then(res => res.json())
+        .then(order => {
+          const options = {
+            key: 'rzp_test_L1sqG4NKJOJaSb', // Replace with your Razorpay Key ID
+            amount: order.amount,
+            currency: order.currency,
+            name: "Demo Payment",
+            description: "Test Transaction",
+            order_id: order.id,
+            handler: function (response) {
+              alert("Payment Successful!");
+              console.log(response);
+            },
+            prefill: {
+              name: "Test User",
+              email: "test@example.com",
+              contact: "9999999999"
+            },
+            theme: {
+              color: "#3399cc"
+            }
+          };
+          const rzp = new Razorpay(options);
+          rzp.open();
+        });
+    }
   </script>
 </body>
 </html>
