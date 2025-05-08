@@ -4,41 +4,32 @@
   <title>Razorpay Payment</title>
 </head>
 <body>
-  <h2>Enter Amount to Pay</h2>
-  <form id="paymentForm">
-    <input type="number" id="amount" placeholder="Amount in INR" required />
-    <button type="submit">Pay</button>
-  </form>
+  <h1>Pay ₹500</h1>
+  <button id="payBtn">Pay with Razorpay</button>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-    document.getElementById('paymentForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const amount = document.getElementById('amount').value;
-
-      const res = await fetch('http://localhost:5000/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount })
-      });
-
-      const order = await res.json();
+    document.getElementById("payBtn").onclick = async function () {
+      const res = await fetch("/create-order", { method: "POST" });
+      const data = await res.json();
 
       const options = {
-        key: "rzp_test_L1sqG4NKJOJaSb",
-        amount: order.amount,
-        currency: "INR",
-        name: "My Store",
-        description: "Test Payment",
-        order_id: order.id,
+        key: "rzp_test_L1sqG4NKJOJaSb", // Replace with your public key or inject via server
+        amount: data.amount,
+        currency: data.currency,
+        name: "Demo Payment",
+        order_id: data.id,
         handler: function (response) {
-          alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+          alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+        },
+        theme: {
+          color: "#3399cc"
         }
       };
 
       const rzp = new Razorpay(options);
       rzp.open();
-    });
+    };
   </script>
 </body>
 </html>
