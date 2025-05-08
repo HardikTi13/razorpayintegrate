@@ -10,8 +10,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 const instance = new Razorpay({
-  key_id: "YOUR_KEY_ID",          // Replace with your Razorpay Key ID
-  key_secret: "YOUR_KEY_SECRET"   // Replace with your Razorpay Secret
+  key_id: "rzp_test_L1sqG4NKJOJaSb",          // Replace with your Razorpay Key ID
+  key_secret: "UXzMnSy51CVYCTaYIQ9lqMhS"   // Replace with your Razorpay Secret
 });
 
 app.post("/order", async (req, res) => {
